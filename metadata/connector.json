@@ -16,6 +16,6 @@
   "support": "info@picmim.com",
   "profiles": {
     "chatgpt": "Full catalog allowed by consented scopes, current role, and workspace credits.",
-    "claude_hosted": "Directory-safe text-only catalog without AI media generation."
+    "claude_hosted": "Full catalog allowed by consented scopes, current role, and workspace credits, with AI work performed and billed by Picmim."
   }
 }

@@ -14,17 +14,18 @@ Picmim uses one universal endpoint for ChatGPT, Claude, and other compatible cli
 
 ## Platform behavior
 
-ChatGPT receives the full tool catalog allowed by the user's OAuth scopes and workspace role, including Picmim's AI-assisted Plan and visual workflows.
+ChatGPT, Claude, and other compatible clients receive the same Picmim tool catalog allowed by the user's OAuth scopes, workspace role, and available credits. This includes Picmim's AI-assisted content Plans, image generation, image editing and variations, visual Plan actions, analytics, drafts, scheduling, publishing, inbox, media, and settings workflows.
 
-Claude hosted connections receive a directory-safe, text-only profile. Standalone AI image generation is not advertised, content Plans require `generate_images=false`, visual Plan actions are removed, and long-running operations exclude image generation. This keeps the public Claude listing aligned with Anthropic's directory policy while preserving the same OAuth and workspace security model.
+AI work runs on Picmim infrastructure. The MCP client requests an operation; Picmim checks permissions and credits, performs and bills the work through the same services used by Picmim Chat V2, stores the Plan or media in the user's workspace, and returns structured results for the client to present. High-impact actions keep Picmim's existing approval protections.
 
 ## Useful prompts
 
 1. `List my available Picmim workspaces and show their permissions.`
 2. `For my selected workspace, show the connected social accounts and their exact IDs.`
-3. `Create a two-day text-only content plan starting tomorrow with one draft post per day. Do not schedule or publish anything.`
+3. `Create a two-day content plan starting tomorrow with one visual draft post per day. Generate suitable images, but do not schedule or publish anything.`
 4. `Show open posting gaps for the next seven days in my workspace timezone.`
 5. `Retrieve the latest content plan and summarize each item's review status.`
+6. `Generate a square social image for a product-launch post and save it to my Picmim media library.`
 
 ## Public metadata
 

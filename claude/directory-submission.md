@@ -26,31 +26,37 @@ This file contains copy-ready values for the Claude.ai remote connector submissi
 
 ### Description
 
-Picmim helps social media teams inspect connected accounts and performance, find calendar gaps, create text-first content Plans, manage draft posts, and review or reschedule Plan items in explicitly approved Picmim workspaces. Users authenticate with Picmim OAuth, choose which workspaces to share, and grant only the capabilities they need. Access is always limited by the user's current Picmim role.
+Picmim helps social media teams inspect connected accounts and performance, find calendar gaps, create content Plans and social visuals, manage draft posts, and review or reschedule Plan items in explicitly approved Picmim workspaces. Users authenticate with Picmim OAuth, choose which workspaces to share, and grant only the capabilities they need. Access is always limited by the user's current Picmim role.
 
-The Claude directory connection is text-only. It does not expose standalone AI image generation, requires generated content Plans to use `generate_images=false`, and removes visual-generation Plan actions. Draft creation and scheduling remain permission-scoped; publishing, deletion, and other high-impact actions retain Picmim's approval protections.
+Claude can request the same capability-scoped Picmim workflows as other compatible MCP clients, including social image generation, image editing and variations, content Plans with generated visuals, and Plan-item visual regeneration. Picmim performs, bills, and stores this work on its own infrastructure, then returns operation status and workspace media or Plan results to Claude. Draft creation and scheduling remain permission-scoped; publishing, deletion, and other high-impact actions retain Picmim's approval protections.
 
 ## Use cases
 
 ### 1. Plan two days of draft social content
 
-Prompt: `Create a two-day text-only Picmim content plan starting tomorrow with one draft post per day for my connected Facebook account. Do not schedule or publish anything.`
+Prompt: `Create a two-day Picmim content plan starting tomorrow with one visual draft post per day for my connected Facebook account. Generate suitable images, but do not schedule or publish anything.`
 
-Expected behavior: Claude first resolves the workspace and connected account, then creates a draft text-only Plan with `generate_images=false`. It returns the Plan identifier and status without scheduling or publishing.
+Expected behavior: Claude first resolves the workspace and connected account, then creates a draft Plan with `generate_images=true`. Picmim queues and bills its normal Plan and image workflows, stores the generated media in the workspace, and returns the Plan identifier and status without scheduling or publishing.
 
-### 2. Find calendar gaps
+### 2. Generate a social visual
+
+Prompt: `Generate a square Picmim social image for a product-launch post, using my workspace brand style, and save it to my media library.`
+
+Expected behavior: Claude starts Picmim's asynchronous image operation and polls it to completion. Picmim performs and bills the generation, stores the result in the approved workspace, and returns the media identifier and URL.
+
+### 3. Find calendar gaps
 
 Prompt: `Show the open posting gaps in my selected Picmim workspace for the next seven days.`
 
 Expected behavior: Claude returns available periods in the workspace timezone and does not modify any posts.
 
-### 3. Review a generated Plan
+### 4. Review a generated Plan
 
 Prompt: `Retrieve my latest Picmim content plan and summarize each item's caption, date, and review status.`
 
 Expected behavior: Claude reads the latest Plan and its items without approving, rewriting, rescheduling, or publishing them.
 
-### 4. Inspect performance
+### 5. Inspect performance
 
 Prompt: `Summarize the recent performance of my connected accounts and identify the strongest account.`
 
@@ -62,7 +68,7 @@ Expected behavior: Claude reads bounded analytics data from the selected workspa
 - Social accounts must already be connected inside Picmim.
 - The user selects workspaces and permissions during OAuth consent.
 - The connector reads data and can write drafts or schedules only when the user grants the matching scope and has an eligible workspace role.
-- AI-backed text work uses Picmim workspace credits at the same rates and policies as Picmim Chat V2.
+- AI-backed text, image, video, and Plan work uses Picmim workspace credits at the same rates and policies as Picmim Chat V2.
 
 ## Data handling
 
@@ -70,7 +76,7 @@ Expected behavior: Claude reads bounded analytics data from the selected workspa
 - Personal health data: No.
 - Sponsored content or advertising: No.
 - Conversation collection: Picmim receives only the structured tool inputs needed to execute the requested operation; it does not request Claude memory, chat history, or conversation summaries.
-- AI media generation: Not available in the hosted Claude directory profile.
+- AI media generation: Picmim can generate and edit social-content visuals and content-Plan media when the user grants the corresponding capability. Picmim performs, bills, stores, and returns the result; Claude does not receive Picmim's provider credentials.
 
 ## Test and launch
 
@@ -80,10 +86,10 @@ Provide reviewer credentials privately in Claude's portal. The account must be f
 - At least one connected test social account.
 - Recent analytics data.
 - Calendar entries and at least one open gap.
-- At least one completed text-only content Plan.
-- Enough workspace credits to run the submitted AI-backed text test.
+- At least one completed visual content Plan.
+- Enough workspace credits to run the submitted AI-backed Plan and image tests.
 
-State in the access instructions: `Sign in with the supplied credentials, approve Picmim Review Workspace, grant the requested draft and Plan scopes, then run the listed use cases. No social content needs to be published.`
+State in the access instructions: `Sign in with the supplied credentials, approve Picmim Review Workspace, grant the requested draft, media-generation, and Plan scopes, then run the listed use cases. No social content needs to be published.`
 
 ## Compliance confirmations
 
@@ -92,7 +98,7 @@ Before checking the portal boxes, verify the deployed server still satisfies eac
 - The connector complies with Anthropic's Software Directory policy and terms.
 - It uses Picmim's first-party API.
 - It does not transfer money or financial assets.
-- The Claude-hosted profile does not generate AI images, video, or audio.
+- AI-generated visuals are part of Picmim's social-content and content-Plan design workflows; the listing does not present Picmim as a general-purpose model or media-generation marketplace.
 - Tool descriptions do not contain prompt-injection instructions.
 - It does not collect Claude conversation data beyond explicit tool inputs.
 - Public documentation, privacy policy, support contact, and this repository are live.
