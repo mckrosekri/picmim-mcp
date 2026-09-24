@@ -2,6 +2,7 @@
   "name": "Picmim",
   "version": "1.0.0",
   "website": "https://picmim.com",
+  "repository": "https://github.com/mckrosekri/picmim-mcp",
   "mcp": {
     "url": "https://picmim.com/mcp",
     "transport": "streamable-http",
