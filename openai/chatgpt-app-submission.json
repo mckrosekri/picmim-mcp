@@ -1,0 +1,328 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "Picmim",
+    "subtitle": "Plan and schedule content",
+    "description": "Picmim helps users inspect connected social accounts and performance, find calendar gaps, create drafts and content plans, generate visual assets, and manage posts in explicitly selected Picmim workspaces.",
+    "category": "PRODUCTIVITY"
+  },
+  "tools": {
+    "analyze_url_structured": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Analyzes a public URL with billable AI provider work and records workspace credit usage.",
+        "open_world_justification": "Fetches an arbitrary public URL and sends the resulting context to the configured AI provider.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke existing Picmim content."
+      }
+    },
+    "analyze_video": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Analyzes video with billable AI provider work and records workspace credit usage.",
+        "open_world_justification": "Processes externally sourced video through the configured AI provider.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke existing Picmim content."
+      }
+    },
+    "find_analytics_entities": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only resolves analytics entities already stored in the selected Picmim workspace.",
+        "open_world_justification": "Search is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not change analytics records or social content."
+      }
+    },
+    "find_library_assets": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only searches media already available in the selected workspace library.",
+        "open_world_justification": "Search is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not create, move, overwrite, or delete media."
+      }
+    },
+    "find_posts": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only finds posts in the selected Picmim workspace.",
+        "open_world_justification": "Search is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not modify or publish posts."
+      }
+    },
+    "generate_content_plan": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Creates a new draft content plan and consumes workspace AI credits.",
+        "open_world_justification": "Uses the configured external AI provider to generate plan strategy and copy.",
+        "destructive_justification": "Adds a new draft plan without deleting, overwriting, scheduling, or publishing existing content."
+      }
+    },
+    "generate_hashtags": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Generates hashtags with billable AI provider work and records workspace credit usage.",
+        "open_world_justification": "Uses the configured external AI provider for generation.",
+        "destructive_justification": "Does not modify or publish workspace content."
+      }
+    },
+    "get_analytics_insights": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves analytics insights already available in the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not change analytics or social content."
+      }
+    },
+    "get_calendar_gaps": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only reads the selected workspace calendar to identify unfilled periods.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not create, move, schedule, or delete posts."
+      }
+    },
+    "get_connected_accounts": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only lists social accounts already connected to the selected workspace.",
+        "open_world_justification": "Access is limited to the user's bounded Picmim workspace.",
+        "destructive_justification": "Does not connect, disconnect, or modify social accounts."
+      }
+    },
+    "get_content_plans": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves content plans and their generated items from the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not approve, rewrite, reschedule, or publish plan items."
+      }
+    },
+    "get_hashtag_groups": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves saved hashtag groups from the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not create, edit, or delete hashtag groups."
+      }
+    },
+    "get_instagram_recent_media": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves recent media for an Instagram account already connected to the selected workspace.",
+        "open_world_justification": "Access is constrained to the user's connected account and authenticated workspace.",
+        "destructive_justification": "Does not import, edit, or publish media."
+      }
+    },
+    "get_mcp_operation": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only reads progress and results for an operation started by the same credential.",
+        "open_world_justification": "Lookup is bounded to the authenticated credential, user, and workspace.",
+        "destructive_justification": "Does not start, retry, cancel, or alter operations."
+      }
+    },
+    "get_notification_preferences": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves the authenticated user's Picmim notification preferences.",
+        "open_world_justification": "Access is limited to the authenticated Picmim account.",
+        "destructive_justification": "Does not change notifications or subscriptions."
+      }
+    },
+    "get_recent_tool_results": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only recovers prior MCP results for the same credential, user, and workspace.",
+        "open_world_justification": "Lookup is bounded to the authenticated Picmim connection.",
+        "destructive_justification": "Does not rerun or alter the original tool call."
+      }
+    },
+    "get_scheduled_and_published_posts": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves scheduled and published posts from the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not reschedule, unpublish, or delete posts."
+      }
+    },
+    "get_templates": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves templates available to the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not create, edit, or delete templates."
+      }
+    },
+    "get_trend_example_feed": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves the trend examples already collected for the selected workspace.",
+        "open_world_justification": "The tool reads a bounded Picmim-managed feed rather than arbitrary external entities.",
+        "destructive_justification": "Does not modify trends or workspace content."
+      }
+    },
+    "get_user_preferences": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves the authenticated user's Picmim preferences.",
+        "open_world_justification": "Access is limited to the authenticated Picmim account.",
+        "destructive_justification": "Does not change preferences."
+      }
+    },
+    "get_workspace_brand_settings": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves brand settings for the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not change the brand profile."
+      }
+    },
+    "get_workspace_performance_summary": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only retrieves a performance summary for the selected workspace.",
+        "open_world_justification": "Access is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not alter analytics or social content."
+      }
+    },
+    "list_workspaces": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only lists workspaces explicitly approved for the OAuth connection.",
+        "open_world_justification": "Access is limited to the authenticated user's approved Picmim workspaces.",
+        "destructive_justification": "Does not add, remove, or modify workspace access."
+      }
+    },
+    "manage_images": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": true },
+      "justifications": {
+        "read_only_justification": "Generates, edits, or creates variations of media-library images and may consume AI credits.",
+        "open_world_justification": "Image actions can invoke the configured external AI provider.",
+        "destructive_justification": "The edit action can replace the selected library image with transformed content."
+      }
+    },
+    "manage_plan_items": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": true },
+      "justifications": {
+        "read_only_justification": "Accepts, declines, rewrites, reschedules, or requests visuals for plan items.",
+        "open_world_justification": "Rewrite and visual actions can invoke the configured external AI provider.",
+        "destructive_justification": "Actions can decline or overwrite generated copy and change scheduled times."
+      }
+    },
+    "manage_posts": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": true },
+      "justifications": {
+        "read_only_justification": "Creates, updates, duplicates, approves, schedules, publishes, cancels, or deletes posts.",
+        "open_world_justification": "Publishing actions send content to external social networks.",
+        "destructive_justification": "Actions can permanently delete posts, overwrite drafts, or publish content irreversibly."
+      }
+    },
+    "render_analytics_chart": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only renders a chart from analytics data already available in the selected workspace.",
+        "open_world_justification": "Rendering is limited to bounded workspace analytics data.",
+        "destructive_justification": "Does not modify analytics or social content."
+      }
+    },
+    "search_help_docs": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only searches Picmim's curated help documentation.",
+        "open_world_justification": "Search is limited to the bounded Picmim help index.",
+        "destructive_justification": "Does not change documentation or workspace data."
+      }
+    },
+    "search_pexels_images": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only searches Pexels and returns candidate public image metadata without importing it.",
+        "open_world_justification": "Queries an external public image catalog.",
+        "destructive_justification": "Does not save, edit, or delete media."
+      }
+    },
+    "start_mcp_operation": {
+      "annotations": { "readOnlyHint": false, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Creates and queues a durable image or video operation and may consume AI credits.",
+        "open_world_justification": "Long-running media operations can invoke configured external AI providers.",
+        "destructive_justification": "Starts an additive operation without deleting or overwriting existing workspace content."
+      }
+    },
+    "suggest_posting_windows": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": false, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Only computes suggested posting windows from selected-workspace data.",
+        "open_world_justification": "Computation is limited to a bounded authenticated workspace.",
+        "destructive_justification": "Does not schedule or modify posts."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "List the workspaces approved for the connection.",
+      "user_prompt": "List my available Picmim workspaces and their permissions.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_workspaces",
+      "expected_output": "Returns the approved workspaces with UUIDs, names, timezones, and draft-management permission.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Inspect connected social accounts before planning content.",
+      "user_prompt": "For my Picmim workspace named Picmim Review Workspace, show the connected social accounts and their exact account IDs.",
+      "file_attachment_urls": null,
+      "tools_triggered": "get_connected_accounts",
+      "expected_output": "Returns only the social accounts connected to the selected workspace with stable identifiers and platform details.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Generate a draft two-day content plan.",
+      "user_prompt": "Create a two-day Picmim content plan starting tomorrow with one draft post per day for my connected Facebook account. Do not schedule or publish anything.",
+      "file_attachment_urls": null,
+      "tools_triggered": "generate_content_plan",
+      "expected_output": "Creates a draft plan, reports its plan ID and generation status, and does not schedule or publish posts.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Find open calendar periods without changing the schedule.",
+      "user_prompt": "Show the open posting gaps in my selected Picmim workspace for the next seven days.",
+      "file_attachment_urls": null,
+      "tools_triggered": "get_calendar_gaps",
+      "expected_output": "Returns open periods in the workspace timezone without creating or modifying posts.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Retrieve the generated content plan and its final items.",
+      "user_prompt": "Get the latest Picmim content plan with its items and report each item's current review status.",
+      "file_attachment_urls": null,
+      "tools_triggered": "get_content_plans",
+      "expected_output": "Returns the plan metadata, generation status, and item content without approving, scheduling, or publishing anything.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not invoke Picmim for unrelated general writing.",
+      "user_prompt": "Write a short poem about autumn leaves.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Answers without invoking Picmim because the request is unrelated to social-media workspace management.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not claim the connector can connect a new social account.",
+      "user_prompt": "Connect my new Instagram account to Picmim for me.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Explains that social accounts must be connected in the Picmim web app and does not invoke an unsupported tool.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not infer a workspace when the requested name is ambiguous.",
+      "user_prompt": "Publish this post in my client workspace.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Requests the exact workspace and content details instead of guessing or publishing.",
+      "expected_output_url": null
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Picmim",
+  "version": "1.0.0",
+  "website": "https://picmim.com",
+  "mcp": {
+    "url": "https://picmim.com/mcp",
+    "transport": "streamable-http",
+    "authentication": "oauth_dcr",
+    "protected_resource_metadata": "https://picmim.com/.well-known/oauth-protected-resource",
+    "authorization_server_metadata": "https://picmim.com/.well-known/oauth-authorization-server"
+  },
+  "documentation": "https://picmim.com/mcp-clients.md",
+  "privacy": "https://picmim.com/privacy",
+  "terms": "https://picmim.com/terms",
+  "support": "info@picmim.com",
+  "profiles": {
+    "chatgpt": "Full catalog allowed by consented scopes, current role, and workspace credits.",
+    "claude_hosted": "Directory-safe text-only catalog without AI media generation."
+  }
+}

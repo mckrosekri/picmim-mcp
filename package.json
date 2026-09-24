@@ -1,0 +1,13 @@
+{
+  "name": "picmim-mcp-public",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public metadata and readiness checks for the Picmim remote MCP connector",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check-public-connector.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
