@@ -74,7 +74,7 @@ try {
       challengeBody.trim().length > 0 &&
       !challengeBody.trim().startsWith("{") &&
       /no-store/i.test(challenge.headers.get("cache-control") ?? ""),
-    `HTTP ${challenge.status}; token present=${challengeBody.trim().length > 0}`,
+    `HTTP ${challenge.status}; plain-text token ready=${challenge.ok && challengeBody.trim().length > 0}`,
   );
 } catch (error) {
   record("Network execution", false, error instanceof Error ? error.message : "Unknown error");
