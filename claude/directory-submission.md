@@ -6,7 +6,7 @@ This file contains copy-ready values for the Claude.ai remote connector submissi
 
 - Connector type: `Remote MCP server`
 - URL configuration: `Universal URL`
-- Server URL: `https://picmim.com/mcp`
+- Server URL: `https://picmim.com/mcp/claude-directory`
 - Transport: `Streamable HTTP`
 - Authentication: `OAuth with Dynamic Client Registration (oauth_dcr)`
 - OAuth client ID: leave blank
@@ -28,7 +28,7 @@ This file contains copy-ready values for the Claude.ai remote connector submissi
 
 Picmim helps social media teams inspect connected accounts and performance, find calendar gaps, create content Plans and social visuals, manage draft posts, and review or reschedule Plan items in explicitly approved Picmim workspaces. Users authenticate with Picmim OAuth, choose which workspaces to share, and grant only the capabilities they need. Access is always limited by the user's current Picmim role.
 
-Claude can request the same capability-scoped Picmim workflows as other compatible MCP clients, including social image generation, image editing and variations, content Plans with generated visuals, and Plan-item visual regeneration. Picmim performs, bills, and stores this work on its own infrastructure, then returns operation status and workspace media or Plan results to Claude. Draft creation and scheduling remain permission-scoped; publishing, deletion, and other high-impact actions retain Picmim's approval protections.
+Claude can request capability-scoped Picmim workflows including social-visual creation, editing and variations, content Plans with generated visuals, and Plan-item visual regeneration. The directory-facing visual tools require the intended Picmim social post, story, campaign, or content-Plan context and do not provide a general-purpose standalone image generator. Picmim performs, bills, and stores this work on its own infrastructure, then returns operation status and workspace media or Plan results to Claude. Draft creation and scheduling remain permission-scoped; publishing, deletion, and other high-impact actions retain Picmim's approval protections.
 
 ## Use cases
 
@@ -42,7 +42,7 @@ Expected behavior: Claude first resolves the workspace and connected account, th
 
 Prompt: `Generate a square Picmim social image for a product-launch post, using my workspace brand style, and save it to my media library.`
 
-Expected behavior: Claude starts Picmim's asynchronous image operation and polls it to completion. Picmim performs and bills the generation, stores the result in the approved workspace, and returns the media identifier and URL.
+Expected behavior: Claude calls `start_social_visual_operation` with a `social_post` or `social_campaign` design context and polls it to completion. Picmim performs and bills the generation, stores the result in the approved workspace, and returns the media identifier and URL.
 
 ### 3. Find calendar gaps
 
@@ -68,7 +68,7 @@ Expected behavior: Claude reads bounded analytics data from the selected workspa
 - Social accounts must already be connected inside Picmim.
 - The user selects workspaces and permissions during OAuth consent.
 - The connector reads data and can write drafts or schedules only when the user grants the matching scope and has an eligible workspace role.
-- AI-backed text, image, video, and Plan work uses Picmim workspace credits at the same rates and policies as Picmim Chat V2.
+- AI-backed text, social-visual, video-analysis, and Plan work uses Picmim workspace credits at the same rates and policies as Picmim Chat V2.
 
 ## Data handling
 
@@ -102,3 +102,7 @@ Before checking the portal boxes, verify the deployed server still satisfies eac
 - Tool descriptions do not contain prompt-injection instructions.
 - It does not collect Claude conversation data beyond explicit tool inputs.
 - Public documentation, privacy policy, support contact, and this repository are live.
+
+## Custom connector alternative
+
+Claude users who intentionally install an elevated custom connector may use `https://picmim.com/mcp` for Picmim's unrestricted capability-scoped catalog. The Connector Directory submission must use `https://picmim.com/mcp/claude-directory`.

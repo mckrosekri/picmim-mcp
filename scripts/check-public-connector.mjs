@@ -1,5 +1,6 @@
 const origin = process.env.PICMIM_ORIGIN ?? "https://picmim.com";
 const endpoint = new URL("/mcp", origin);
+const claudeDirectoryEndpoint = new URL("/mcp/claude-directory", origin);
 
 const results = [];
 
@@ -39,6 +40,18 @@ try {
     `HTTP ${resource.response.status}`,
   );
 
+  const claudeResource = await getJson(
+    "/.well-known/oauth-protected-resource/mcp/claude-directory",
+  );
+  record(
+    "Claude Directory protected resource",
+    claudeResource.response.ok &&
+      claudeResource.body?.resource === claudeDirectoryEndpoint.href &&
+      Array.isArray(claudeResource.body?.authorization_servers) &&
+      claudeResource.body.authorization_servers.length > 0,
+    `HTTP ${claudeResource.response.status}`,
+  );
+
   const auth = await getJson("/.well-known/oauth-authorization-server");
   record(
     "OAuth authorization server",
@@ -62,6 +75,24 @@ try {
     "MCP OAuth challenge",
     mcp.status === 401 && /resource_metadata=/i.test(mcp.headers.get("www-authenticate") ?? ""),
     `HTTP ${mcp.status}`,
+  );
+
+  const claudeMcp = await fetch(claudeDirectoryEndpoint, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/event-stream",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
+    redirect: "manual",
+  });
+  record(
+    "Claude Directory MCP OAuth challenge",
+    claudeMcp.status === 401 &&
+      /oauth-protected-resource\/mcp\/claude-directory/i.test(
+        claudeMcp.headers.get("www-authenticate") ?? "",
+      ),
+    `HTTP ${claudeMcp.status}`,
   );
 
   const challenge = await fetch(new URL("/.well-known/openai-apps-challenge", origin), {
