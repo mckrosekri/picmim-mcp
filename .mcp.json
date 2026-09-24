@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "picmim": {
+      "type": "http",
+      "url": "https://picmim.com/mcp"
+    }
+  }
+}

@@ -1,61 +1,62 @@
-# Picmim MCP Connector
+# Picmim for Grok Build
 
-The Picmim connector gives compatible AI clients access to a user's explicitly approved Picmim workspaces for social-media planning, analytics, draft creation, scheduling, and content-plan management.
+Picmim is a hosted MCP integration for planning, drafting, scheduling, publishing, and analyzing social-media content in Picmim workspaces. This repository is a small, cross-client plugin package: it contains Grok Build metadata, a bounded workspace skill, public documentation, and checks. It does **not** contain the Picmim SaaS, OAuth credentials, social-network credentials, installers, hooks, or local executables.
 
-## Connect
+## Install in Grok Build
 
-- Full MCP endpoint (ChatGPT, custom connectors, and compatible clients): `https://picmim.com/mcp`
-- Claude Connector Directory endpoint: `https://picmim.com/mcp/claude-directory`
-- Transport: Streamable HTTP
-- Authentication: OAuth 2.1 with Dynamic Client Registration and PKCE
-- Public setup guide: <https://picmim.com/mcp-clients.md>
-- Authentication guide: <https://picmim.com/auth.md>
+Install this reviewed plugin source through Grok Build or the xAI plugin marketplace. The package exposes one remote Streamable HTTP MCP server:
 
-Both URLs use the same Picmim MCP implementation, OAuth authority, workspace consent, billing, queues, auditing, and business logic. Each user signs in to Picmim, selects the workspaces to share, and grants only the requested capabilities. Access remains limited by the user's Picmim role and workspace-credit balance. OAuth tokens are bound to the exact resource URL approved during consent and cannot be replayed across the two endpoints.
+```text
+https://picmim.com/mcp
+```
 
-## Platform behavior
+Grok Build discovers `.mcp.json` and opens the hosted OAuth flow. No token, client secret, shell command, or post-install step is needed. For manual setup or another compatible MCP client, use the same universal endpoint and consult [the client guide](https://picmim.com/mcp-clients.md). The historical `/mcp/claude-directory` path is not live and is not a supported installation URL.
 
-The full endpoint exposes the complete Picmim catalog allowed by the user's OAuth scopes, workspace role, and available credits. This includes AI-assisted content Plans, image generation, image editing and variations, visual Plan actions, analytics, drafts, scheduling, publishing, inbox, media, and settings workflows.
+## Authentication and permissions
 
-The Claude Directory endpoint keeps those Picmim business capabilities but presents image creation, editing, and variation only as social-design workflows. Its `manage_social_visuals` and `start_social_visual_operation` tools require a design context tied to a social post, story, campaign, or content Plan. Picmim stores that context in encrypted audit or operation records without adding it to the image-provider prompt. `start_video_analysis` analyzes existing workspace video and does not generate video or audio. Claude users who intentionally install Picmim as an elevated custom connector can use the full endpoint instead.
+Picmim uses OAuth 2.1 authorization code flow with PKCE (S256) and Dynamic Client Registration. A user signs in directly with Picmim, selects the workspaces to share, and approves only the requested scopes. Discovery metadata is authoritative:
 
-AI work runs on Picmim infrastructure. The MCP client requests an operation; Picmim checks permissions and credits, performs and bills the work through the same services used by Picmim Chat V2, stores the Plan or media in the user's workspace, and returns structured results for the client to present. High-impact actions keep Picmim's existing approval protections.
+- MCP discovery: `https://picmim.com/.well-known/mcp.json`
+- Protected-resource metadata: `https://picmim.com/.well-known/oauth-protected-resource`
+- Authorization-server metadata: `https://picmim.com/.well-known/oauth-authorization-server`
 
-## Useful prompts
+Connections begin read-only. The currently advertised scopes are `mcp:use`, `content:drafts`, `media:generate`, `plans:generate`, `plans:manage`, `openid`, and `email`; the consent screen requests only the capabilities needed for the chosen workflow. Typical read access covers approved workspaces, connected accounts, calendar, posts, media metadata, content plans, analytics, and help. Write-capable access is separately consented, including `content:drafts` for draft management and the media or plan scopes for those operations. Picmim checks the current workspace membership and role on every request; OAuth scope does not bypass those permissions.
 
-1. `List my available Picmim workspaces and show their permissions.`
-2. `For my selected workspace, show the connected social accounts and their exact IDs.`
-3. `Create a two-day content plan starting tomorrow with one visual draft post per day. Generate suitable images, but do not schedule or publish anything.`
-4. `Show open posting gaps for the next seven days in my workspace timezone.`
-5. `Retrieve the latest content plan and summarize each item's review status.`
-6. `Generate a square social image for a product-launch post and save it to my Picmim media library.`
+Social accounts are connected in Picmim. The plugin never receives or asks for social-provider passwords or credentials.
 
-## Public metadata
+## Writes, approvals, and billing
 
-- Connector metadata: [`metadata/connector.json`](metadata/connector.json)
-- Claude directory copy: [`claude/directory-submission.md`](claude/directory-submission.md)
-- OpenAI submission notes: [`openai/submission-notes.md`](openai/submission-notes.md)
-- OpenAI review JSON: [`openai/chatgpt-app-submission.json`](openai/chatgpt-app-submission.json)
-- OAuth details: [`docs/authentication.md`](docs/authentication.md)
+Write tools can create or edit drafts, schedules, media, inbox activity, content plans, and workspace settings. Scheduling can cause future social publication; publishing, deleting, inbox replies, account changes, and settings changes are consequential. Resolve the workspace, target account, content, and timing before a write. Picmim enforces its server-side approval protections for high-impact actions, and a pending approval or queued operation is not completion.
 
-## Health check
+Some AI-assisted operations—such as content plans, text generation, image generation or edits, and supported analyses—consume Picmim workspace **AI credits** and may use configured AI providers. Credit checks and billing happen on Picmim infrastructure at the same policies as the product. Ordinary deterministic MCP reads and writes are not represented as AI-credit purchases merely because they are called through an AI client.
 
-Node.js 20 or newer is enough; the check has no third-party dependencies.
+## Data handling, telemetry, and retention
+
+The only plugin network destination is `https://picmim.com`, including the MCP and OAuth discovery/authorization endpoints above. Picmim receives the structured tool inputs necessary to perform the requested operation, validates access, and returns structured results. It does not request Grok conversation memory, chat history, browser sessions, environment variables, or provider credentials.
+
+Picmim records operation and audit data needed for authorization, billing, status recovery, and workspace accountability. This telemetry is limited to service-operation and audit records; it is not Grok conversation telemetry. Encrypted asynchronous MCP operation inputs and results are retained for seven days by default. MCP request metadata—method, status, duration, user/workspace identifiers, and tool name, without bearer credentials, tool inputs, or response content—is retained for six months. Generated workspace media, posts, and plans remain in the workspace under Picmim's normal product and account controls. Do not put tokens, customer data, or review credentials in this repository or public issues.
+
+You can revoke access in Picmim's connected-app/authorization controls; workspace membership and role changes also take effect on subsequent server checks. For account or data-rights questions, use the links below.
+
+- [Privacy](https://picmim.com/privacy)
+- [Terms](https://picmim.com/terms)
+- [Support and security reporting](mailto:info@picmim.com)
+- [OAuth details](docs/authentication.md)
+
+## Skill behavior
+
+The included `social-workspace` skill tells Grok to list available workspaces first, discover real account and media identifiers, respect returned approval and operation states, and never fabricate access or retry an uncertain write blindly. It distinguishes drafting from scheduling and publishing, which require explicit user authorization.
+
+## Verify
+
+Node.js 20+ is sufficient and no dependencies are installed:
 
 ```bash
 npm run check
 ```
 
-The script validates public discovery, OAuth metadata for both MCP resources, both authentication challenges, and the OpenAI domain-verification endpoint shape. It never requests or prints credentials.
+The check validates the local Grok package and live universal MCP discovery, OAuth metadata, and unauthenticated OAuth challenge. It never prints or requests credentials.
 
-## Privacy and support
+## License
 
-- Privacy policy: <https://picmim.com/privacy>
-- Terms: <https://picmim.com/terms>
-- Support and security reports: <info@picmim.com>
-
-Do not put Picmim access tokens, OAuth credentials, reviewer passwords, challenge tokens, or customer data in GitHub issues.
-
-## Repository scope
-
-This public repository contains connector metadata, platform-specific behavior documentation, submission copy, and a public readiness check for Picmim's hosted remote MCP service. The production SaaS implementation is maintained separately and is not distributed from this repository. Picmim is submitted to Claude as a remote MCP connector, not as a Claude plugin.
+This package is licensed under [Apache-2.0](LICENSE). Picmim maintains the hosted service separately; marketplace availability is not xAI endorsement, verification, or a distribution of the private Picmim application.

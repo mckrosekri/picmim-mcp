@@ -1,6 +1,6 @@
 {
   "name": "Picmim",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "website": "https://picmim.com",
   "repository": "https://github.com/mckrosekri/picmim-mcp",
   "mcp": {
@@ -19,13 +19,9 @@
       "url": "https://picmim.com/mcp",
       "catalog": "Full catalog allowed by consented scopes, current role, and workspace credits."
     },
-    "claude_directory": {
-      "url": "https://picmim.com/mcp/claude-directory",
-      "catalog": "Full Picmim business capabilities with social-design-scoped visual tools and existing Picmim billing, storage, and audit controls."
-    },
-    "claude_custom": {
+    "grok_build": {
       "url": "https://picmim.com/mcp",
-      "catalog": "Elevated custom connector using the unrestricted capability-scoped catalog."
+      "catalog": "Hosted OAuth MCP server; capabilities remain limited by consented scopes, current workspace role, approvals, and workspace credits."
     }
   }
 }

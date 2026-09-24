@@ -1,0 +1,11 @@
+{
+  "name": "picmim",
+  "version": "1.2.0",
+  "description": "Plan, create, schedule, publish, and analyze social content in Picmim through its hosted OAuth MCP server.",
+  "author": { "name": "Picmim", "url": "https://picmim.com" },
+  "homepage": "https://picmim.com/mcp-clients.md",
+  "repository": "https://github.com/mckrosekri/picmim-mcp",
+  "license": "Apache-2.0",
+  "keywords": ["picmim", "picmim mcp", "picmim social media"],
+  "logo": "assets/picmim-logo-512.png"
+}
