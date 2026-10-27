@@ -10,15 +10,50 @@ function record(name, ok, detail) {
   results.push({ name, ok, detail });
 }
 
+function readJson(...segments) {
+  return JSON.parse(fs.readFileSync(path.join(packageRoot, ...segments), "utf8"));
+}
+
+// The `name` a SKILL.md declares in its leading YAML frontmatter, or null without one.
+function skillName(file) {
+  const frontmatter = fs.readFileSync(file, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+  const name = frontmatter?.[1].match(/^name:[ \t]*(.*?)[ \t]*$/m)?.[1];
+
+  return name === undefined ? null : name.replace(/^(["'])(.*)\1$/, "$2");
+}
+
+function validateSkills() {
+  const skillsRoot = path.join(packageRoot, "skills");
+  const directories = fs.existsSync(skillsRoot)
+    ? fs.readdirSync(skillsRoot, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort()
+    : [];
+  const invalid = directories.filter((directory) => {
+    const file = path.join(skillsRoot, directory, "SKILL.md");
+    return !fs.existsSync(file) || skillName(file) !== directory;
+  });
+  const detail = directories.length === 0
+    ? "no skill folders in skills/"
+    : invalid.length > 0
+      ? `missing SKILL.md or frontmatter name differs from its folder: ${invalid.join(", ")}`
+      : `${directories.length} skills, each SKILL.md named after its folder`;
+
+  record("Agent skills", directories.length > 0 && invalid.length === 0, detail);
+}
+
 function validatePackage() {
   try {
-    const plugin = JSON.parse(fs.readFileSync(path.join(packageRoot, ".grok-plugin", "plugin.json"), "utf8"));
-    const mcp = JSON.parse(fs.readFileSync(path.join(packageRoot, ".mcp.json"), "utf8"));
+    const version = readJson("package.json").version;
+    const plugin = readJson(".grok-plugin", "plugin.json");
+    const claudePlugin = readJson(".claude-plugin", "plugin.json");
+    const mcp = readJson(".mcp.json");
     const server = mcp.mcpServers?.picmim;
-    record("Grok plugin manifest", plugin.name === "picmim" && plugin.version === "1.2.0" && plugin.license === "Apache-2.0" && fs.existsSync(path.join(packageRoot, "LICENSE")) && fs.existsSync(path.join(packageRoot, "skills", "social-workspace", "SKILL.md")), "local manifest, license, and skill");
+    const hasVersion = typeof version === "string" && version !== "";
+    record("Grok plugin manifest", plugin.name === "picmim" && hasVersion && plugin.version === version && plugin.license === "Apache-2.0" && fs.existsSync(path.join(packageRoot, "LICENSE")), `local manifest at package version ${version}, and license`);
+    record("Claude Code plugin manifest", claudePlugin.name === "picmim" && hasVersion && claudePlugin.version === version, `local manifest at package version ${version}`);
     record("Grok MCP configuration", server?.type === "http" && server?.url === endpoint.href && !/token|secret|password|api[_-]?key/i.test(JSON.stringify(mcp)), "hosted HTTPS endpoint without credentials");
+    validateSkills();
   } catch (error) {
-    record("Grok package files", false, error instanceof Error ? error.message : "Invalid package files");
+    record("Plugin package files", false, error instanceof Error ? error.message : "Invalid package files");
   }
 }
 

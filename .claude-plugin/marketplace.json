@@ -1,0 +1,14 @@
+{
+  "name": "picmim",
+  "description": "The Picmim plugin: the Picmim MCP server and its agent skills.",
+  "owner": {
+    "name": "Picmim"
+  },
+  "plugins": [
+    {
+      "name": "picmim",
+      "source": "./",
+      "description": "Plan, create, schedule, and analyze social media content in Picmim workspaces, with skills that teach your agent Picmim's posting, caption, visual, plan, analytics, and inbox rules."
+    }
+  ]
+}

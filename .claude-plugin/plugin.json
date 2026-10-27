@@ -1,0 +1,27 @@
+{
+  "name": "picmim",
+  "version": "1.3.0",
+  "description": "Plan, create, schedule, and analyze social media content in Picmim workspaces, with skills that teach your agent Picmim's posting, caption, visual, plan, analytics, and inbox rules.",
+  "author": {
+    "name": "Picmim",
+    "url": "https://picmim.com"
+  },
+  "homepage": "https://picmim.com",
+  "repository": "https://github.com/mckrosekri/picmim-mcp",
+  "supportUrl": "https://picmim.com/contact",
+  "privacyPolicyUrl": "https://picmim.com/privacy",
+  "termsOfServiceUrl": "https://picmim.com/terms",
+  "keywords": [
+    "social-media",
+    "content-planning",
+    "scheduling",
+    "analytics",
+    "mcp"
+  ],
+  "mcpServers": {
+    "picmim": {
+      "type": "http",
+      "url": "https://picmim.com/mcp"
+    }
+  }
+}
