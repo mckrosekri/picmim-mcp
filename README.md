@@ -1,6 +1,6 @@
 # Picmim for Grok Build
 
-Picmim is a hosted MCP integration for planning, drafting, scheduling, publishing, and analyzing social-media content in Picmim workspaces. This repository is a small, cross-client plugin package: it contains Grok Build metadata, a bounded workspace skill, public documentation, and checks. It does **not** contain the Picmim SaaS, OAuth credentials, social-network credentials, installers, hooks, or local executables.
+Picmim is a hosted MCP integration for planning, drafting, scheduling, publishing, and analyzing social-media content in Picmim workspaces. This repository is a small, cross-client plugin package: it contains Grok Build and Claude Code metadata, Picmim's agent skills, public documentation, and checks. It does **not** contain the Picmim SaaS, OAuth credentials, social-network credentials, installers, hooks, or local executables.
 
 ## Install in Grok Build
 
@@ -43,9 +43,28 @@ You can revoke access in Picmim's connected-app/authorization controls; workspac
 - [Support and security reporting](mailto:info@picmim.com)
 - [OAuth details](docs/authentication.md)
 
-## Skill behavior
+## Skills
 
-The included `social-workspace` skill tells Grok to list available workspaces first, discover real account and media identifiers, respect returned approval and operation states, and never fabricate access or retry an uncertain write blindly. It distinguishes drafting from scheduling and publishing, which require explicit user authorization.
+`skills/` holds seven [Agent Skills](https://agentskills.io) that teach an agent Picmim's rules for its MCP tools. Each folder is a `SKILL.md` plus optional `references/`, and every skill opens with the same ground rules, so each one is safe on its own.
+
+| Skill | Use it when the agent… |
+| --- | --- |
+| `picmim-essentials` | uses any Picmim tool: workspace and account discovery, capabilities, recovery, settings changes. |
+| `picmim-posts` | creates, edits, schedules, publishes, approves, cancels, duplicates, or deletes posts. |
+| `picmim-captions` | writes or edits a caption, hook, hashtags, or on-image text. |
+| `picmim-visuals` | finds, imports, uploads, generates, or edits media. |
+| `picmim-plans` | generates or works on a content plan or the weekly posts Pim writes. |
+| `picmim-analytics` | reviews performance or builds analytics charts. |
+| `picmim-inbox` | reads or replies to comments, reviews Pim's drafted replies, or manages inbox knowledge and settings. |
+
+In Claude Code, this repository is also a plugin marketplace. The `picmim` plugin installs the skills together with the hosted MCP server:
+
+```text
+/plugin marketplace add mckrosekri/picmim-mcp
+/plugin install picmim@picmim
+```
+
+Other clients that read a skills folder can copy the folders from `skills/`. The skills are generated from Picmim's source and synced here with each release; edit them in Picmim, not in this repository.
 
 ## Verify
 
@@ -55,7 +74,7 @@ Node.js 20+ is sufficient and no dependencies are installed:
 npm run check
 ```
 
-The check validates the local Grok package and live universal MCP discovery, OAuth metadata, and unauthenticated OAuth challenge. It never prints or requests credentials.
+The check validates the local Grok and Claude Code manifests against the `package.json` version, every skill folder's `SKILL.md` name, and live universal MCP discovery, OAuth metadata, and unauthenticated OAuth challenge. It never prints or requests credentials.
 
 ## License
 
