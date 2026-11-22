@@ -1,10 +1,10 @@
 # Picmim for Grok Build
 
-Picmim is a hosted MCP integration for planning, drafting, scheduling, publishing, and analyzing social-media content in Picmim workspaces. This repository is a small, cross-client plugin package: it contains Grok Build and Claude Code metadata, Picmim's agent skills, public documentation, and checks. It does **not** contain the Picmim SaaS, OAuth credentials, social-network credentials, installers, hooks, or local executables.
+Picmim is a hosted MCP integration for planning, drafting, scheduling, publishing, and analyzing social-media content in Picmim workspaces. This repository is a small, cross-client plugin package: it contains Grok Build and Claude Code metadata, Picmim's agent skills, public documentation, and checks. It does **not** contain the Picmim SaaS, OAuth credentials, social-network credentials, installers, lifecycle hooks, or a local MCP server.
 
 ## Install in Grok Build
 
-Install this plugin source in Grok Build. Marketplace review is pending. The package exposes one remote Streamable HTTP MCP server:
+Install this plugin source in Grok Build. The package exposes one remote Streamable HTTP MCP server:
 
 ```text
 https://picmim.com/mcp
@@ -20,7 +20,7 @@ Picmim uses OAuth 2.1 authorization code flow with PKCE (S256) and Dynamic Clien
 - Protected-resource metadata: `https://picmim.com/.well-known/oauth-protected-resource`
 - Authorization-server metadata: `https://picmim.com/.well-known/oauth-authorization-server`
 
-New connections receive available supported capabilities by default, including capabilities to create, publish or delete content, manage media and inbox activity, and change settings. Review the consent screen before connecting. Automatic execution is enabled by default; the connection owner can require approval for writes and restrict capabilities afterward in Picmim. Workspace membership, roles, gated feature eligibility, and credit limits still apply. The advertised scope list can change, so consult the discovery metadata above.
+New connections receive available supported capabilities by default, including capabilities to create, publish or delete content, manage media and inbox activity, and change settings. Review the consent screen before connecting. Picmim enables automatic execution by default; the connection owner can require approval for writes and restrict capabilities afterward in Picmim. Workspace membership, roles, gated feature eligibility, and credit limits still apply. The advertised scope list can change, so consult the discovery metadata above.
 
 Social accounts are connected in Picmim. The plugin never receives or asks for social-provider passwords or credentials.
 
