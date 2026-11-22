@@ -25,9 +25,9 @@ ChatGPT may use a callback-ID-specific URI under `https://chatgpt.com/connector/
 
 ## Consent and access
 
-Users authenticate directly with Picmim. The consent screen lets them select workspaces and optional capabilities. OAuth tokens are bound to the Picmim MCP resource URL, the Picmim user, the selected workspaces, the registered client, and the consented scopes. Picmim rechecks current membership and role permissions on every call.
+Users authenticate directly with Picmim and select workspaces on the consent screen. Picmim may include available capabilities beyond those initially requested by the client; review the consent screen before connecting. OAuth tokens are bound to the Picmim MCP resource URL, the user, the selected workspaces, the registered client, and the consented scopes. Picmim rechecks current membership and role permissions on every call.
 
-Default connections are read-only. Write and AI-backed tools require explicit scopes, an eligible workspace role, and available workspace credits. High-impact actions retain Picmim's server-side approval protections.
+New connections are not read-only by default, and automatic execution is enabled by default. The connection owner can restrict capabilities and require approval for writes afterward in Picmim. Write and AI-backed tools remain subject to the granted capabilities, eligible workspace role, feature availability, and applicable workspace credits. High-impact actions retain Picmim's server-side approval protections.
 
 ## Secrets
 

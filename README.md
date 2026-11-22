@@ -4,7 +4,7 @@ Picmim is a hosted MCP integration for planning, drafting, scheduling, publishin
 
 ## Install in Grok Build
 
-Install this reviewed plugin source through Grok Build or the xAI plugin marketplace. The package exposes one remote Streamable HTTP MCP server:
+Install this plugin source in Grok Build. Marketplace review is pending. The package exposes one remote Streamable HTTP MCP server:
 
 ```text
 https://picmim.com/mcp
@@ -14,13 +14,13 @@ Grok Build discovers `.mcp.json` and opens the hosted OAuth flow. No token, clie
 
 ## Authentication and permissions
 
-Picmim uses OAuth 2.1 authorization code flow with PKCE (S256) and Dynamic Client Registration. A user signs in directly with Picmim, selects the workspaces to share, and approves only the requested scopes. Discovery metadata is authoritative:
+Picmim uses OAuth 2.1 authorization code flow with PKCE (S256) and Dynamic Client Registration. A user signs in directly with Picmim and selects the workspaces to share. Picmim can include available capabilities in the consent request beyond the scopes initially requested by the client. Discovery metadata is authoritative for advertised scopes:
 
 - MCP discovery: `https://picmim.com/.well-known/mcp.json`
 - Protected-resource metadata: `https://picmim.com/.well-known/oauth-protected-resource`
 - Authorization-server metadata: `https://picmim.com/.well-known/oauth-authorization-server`
 
-Connections begin read-only. The currently advertised scopes are `mcp:use`, `content:drafts`, `media:generate`, `plans:generate`, `plans:manage`, `openid`, and `email`; the consent screen requests only the capabilities needed for the chosen workflow. Typical read access covers approved workspaces, connected accounts, calendar, posts, media metadata, content plans, analytics, and help. Write-capable access is separately consented, including `content:drafts` for draft management and the media or plan scopes for those operations. Picmim checks the current workspace membership and role on every request; OAuth scope does not bypass those permissions.
+New connections are not read-only by default. Consent can include available capabilities to create, publish or delete content, manage media and inbox activity, and change settings. Review the consent screen before connecting. Automatic execution is enabled by default; the connection owner can require approval for writes and restrict capabilities afterward in Picmim. Workspace membership, roles, gated feature eligibility, and credit limits still apply. The advertised scope list can change, so consult the discovery metadata above.
 
 Social accounts are connected in Picmim. The plugin never receives or asks for social-provider passwords or credentials.
 
@@ -32,7 +32,7 @@ Some AI-assisted operations—such as content plans, text generation, image gene
 
 ## Data handling, telemetry, and retention
 
-The only plugin network destination is `https://picmim.com`, including the MCP and OAuth discovery/authorization endpoints above. Picmim receives the structured tool inputs necessary to perform the requested operation, validates access, and returns structured results. It does not request Grok conversation memory, chat history, browser sessions, environment variables, or provider credentials.
+The only plugin network destination is `https://picmim.com`, including the MCP and OAuth discovery/authorization endpoints above. Picmim’s public [client guide](https://picmim.com/mcp-clients.md) links back to this repository. Picmim receives the structured tool inputs necessary to perform the requested operation, validates access, and returns structured results. It does not request Grok conversation memory, chat history, browser sessions, environment variables, or provider credentials.
 
 Picmim records operation and audit data needed for authorization, billing, status recovery, and workspace accountability. This telemetry is limited to service-operation and audit records; it is not Grok conversation telemetry. Encrypted asynchronous MCP operation inputs and results are retained for seven days by default. MCP request metadata—method, status, duration, user/workspace identifiers, and tool name, without bearer credentials, tool inputs, or response content—is retained for six months. Generated workspace media, posts, and plans remain in the workspace under Picmim's normal product and account controls. Do not put tokens, customer data, or review credentials in this repository or public issues.
 
